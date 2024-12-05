@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Inventario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .form-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .form-container input, .form-container button {
+      padding: 10px;
+    }
+    .form-container button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+    button {
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      border-radius: 3px;
+    }
+    .btn-editar {
+      background-color: #28a745;
+    }
+    .btn-editar:hover {
+      background-color: #218838;
+    }
+    .btn-eliminar {
+      background-color: #dc3545;
+    }
+    .btn-eliminar:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Control de Inventario de Sustancias Químicas</h1>
+  <div class="form-container">
+    <input type="text" id="nombre" placeholder="Nombre de sustancia" />
+    <input type="number" id="cantidad" placeholder="Cantidad" />
+    <button onclick="agregarSustancia()">Agregar</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tablaInventario">
+      <!-- Registros dinámicos -->
+    </tbody>
+  </table>
+  <script>
+    const inventario = [];
+
+    function renderizarTabla() {
+      const tabla = document.getElementById("tablaInventario");
+      tabla.innerHTML = "";
+      inventario.forEach((sustancia, index) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${sustancia.nombre}</td>
+          <td>${sustancia.cantidad}</td>
+          <td>
+            <button class="btn-editar" onclick="editarSustancia(${index})">Editar</button>
+            <button class="btn-eliminar" onclick="eliminarSustancia(${index})">Eliminar</button>
+          </td>
+        `;
+        tabla.appendChild(fila);
+      });
+    }
+
+    function agregarSustancia() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const cantidad = parseInt(document.getElementById("cantidad").value);
+
+      if (nombre === "" || isNaN(cantidad)) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      inventario.push({ nombre, cantidad });
+      renderizarTabla();
+      document.getElementById("nombre").value = "";
+      document.getElementById("cantidad").value = "";
+    }
+
+    function editarSustancia(index) {
+      const nuevaCantidad = prompt(
+        `Ingresa la nueva cantidad para ${inventario[index].nombre}:`,
+        inventario[index].cantidad
+      );
+
+      if (nuevaCantidad !== null && !isNaN(parseInt(nuevaCantidad))) {
+        inventario[index].cantidad = parseInt(nuevaCantidad);
+        renderizarTabla();
+      }
+    }
+
+    function eliminarSustancia(index) {
+      if (confirm(`¿Estás seguro de eliminar ${inventario[index].nombre}?`)) {
+        inventario.splice(index, 1);
+        renderizarTabla();
+      }
+    }
+  </script>
+</body>
+</html>
