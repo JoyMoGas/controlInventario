@@ -142,24 +142,10 @@
         inventario[index].cantidad
       );
 
-      if (nuevaCantidad === null || isNaN(parseInt(nuevaCantidad))) {
-        alert("Cantidad no válida, no se realizaron cambios.");
-        return;
+      if (nuevaCantidad !== null && !isNaN(parseInt(nuevaCantidad))) {
+        inventario[index].cantidad = parseInt(nuevaCantidad);
+        renderizarTabla();
       }
-
-      const nuevaUnidad = prompt(
-        `Ingresa la nueva unidad de medida para ${inventario[index].nombre}:\n(litros, mililitros, gramos, kilogramos, unidades)`,
-        inventario[index].unidad
-      );
-
-      if (!nuevaUnidad || !["litros", "mililitros", "gramos", "kilogramos", "unidades"].includes(nuevaUnidad.toLowerCase())) {
-        alert("Unidad no válida, no se realizaron cambios.");
-        return;
-      }
-
-      inventario[index].cantidad = parseInt(nuevaCantidad);
-      inventario[index].unidad = nuevaUnidad.toLowerCase();
-      renderizarTabla();
     }
 
     function eliminarSustancia(index) {
